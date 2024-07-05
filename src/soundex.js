@@ -1,4 +1,3 @@
-
 function getSoundexCode(char) {
     char = char.toUpperCase();
     const soundexDict = {
@@ -18,27 +17,19 @@ function generateSoundex(name) {
     let soundex = [name[0].toUpperCase()];
     let prevCode = getSoundexCode(name[0]);
 
-    iterateChars(name, soundex, prevCode);
+    for (let i = 1; i < name.length && soundex.length < 4; i++) {
+        let code = getSoundexCode(name[i]);
+        if (code !== '0' && code !== prevCode) {
+            soundex.push(code);
+        }
+        prevCode = code;
+    }
 
     while (soundex.length < 4) {
         soundex.push('0');
     }
 
     return soundex.join('');
-}
-
-function iterateChars(name, soundex, prevCode) {
-    for (let i = 1; i < name.length && soundex.length < 4; i++) {
-        let code = getSoundexCode(name[i]);
-        comparePrevAndCurrentCode(code, prevCode, soundex);
-        prevCode = code;
-    }
-}
-
-function comparePrevAndCurrentCode(code, prevCode, soundex) {
-    if (code !== '0' && code !== prevCode) {
-        soundex.push(code);
-    }
 }
 
 module.exports = {
