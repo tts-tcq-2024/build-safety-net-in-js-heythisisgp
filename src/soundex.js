@@ -1,43 +1,47 @@
-function generateSoundex(name) {
-  function getSoundexCode(char) {
+
+function getSoundexCode(char) {
+    char = char.toUpperCase();
     const soundexDict = {
-      'BFPV': '1',
-      'CGJKQSXZ': '2',
-      'DT': '3',
-      'L': '4',
-      'MN': '5',
-      'R': '6',
+        'B': '1', 'F': '1', 'P': '1', 'V': '1',
+        'C': '2', 'G': '2', 'J': '2', 'K': '2', 'Q': '2', 'S': '2', 'X': '2', 'Z': '2',
+        'D': '3', 'T': '3',
+        'L': '4',
+        'M': '5', 'N': '5',
+        'R': '6'
     };
+    return soundexDict[char] || '0';
+}
 
-    for (const key in soundexDict) {
-      if (key.includes(char.toUpperCase())) {
-        return soundexDict[key];
-      }
+function generateSoundex(name) {
+    if (!name) return '';
+
+    let soundex = [name[0].toUpperCase()];
+    let prevCode = getSoundexCode(name[0]);
+
+    iterateChars(name, soundex, prevCode);
+
+    while (soundex.length < 4) {
+        soundex.push('0');
     }
 
-    return '0';
-  }
+    return soundex.join('');
+}
 
-  if (!name) return '';
-
-  const soundex = [name[0].toUpperCase()];
-  let prevCode = getSoundexCode(name[0]);
-
-  for (let i = 1; i < name.length && soundex.length < 4; i++) {
-    const code = getSoundexCode(name[i]);
-    if (code!== '0' && code!== prevCode) {
-      soundex.push(code);
+function iterateChars(name, soundex, prevCode) {
+    for (let i = 1; i < name.length && soundex.length < 4; i++) {
+        let code = getSoundexCode(name[i]);
+        comparePrevAndCurrentCode(code, prevCode, soundex);
+        prevCode = code;
     }
-    prevCode = code;
-  }
+}
 
-  while (soundex.length < 4) {
-    soundex.push('0');
-  }
-
-  return soundex.join('');
+function comparePrevAndCurrentCode(code, prevCode, soundex) {
+    if (code !== '0' && code !== prevCode) {
+        soundex.push(code);
+    }
 }
 
 module.exports = {
-  generateSoundex,
+    getSoundexCode,
+    generateSoundex
 };
