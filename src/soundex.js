@@ -1,23 +1,23 @@
-function getSoundexCode(char) {
-  const soundexDict = {
-    'BFPV': '1',
-    'CGJKQSXZ': '2',
-    'DT': '3',
-    'L': '4',
-    'MN': '5',
-    'R': '6',
-  };
+function generateSoundex(name) {
+  function getSoundexCode(char) {
+    const soundexDict = {
+      'BFPV': '1',
+      'CGJKQSXZ': '2',
+      'DT': '3',
+      'L': '4',
+      'MN': '5',
+      'R': '6',
+    };
 
-  for (const key in soundexDict) {
-    if (key.includes(char.toUpperCase())) {
-      return soundexDict[key];
+    for (const key in soundexDict) {
+      if (key.includes(char.toUpperCase())) {
+        return soundexDict[key];
+      }
     }
+
+    return '0';
   }
 
-  return '0';
-}
-
-function generateSoundex(name) {
   if (!name) return '';
 
   const soundex = [name[0].toUpperCase()];
@@ -39,6 +39,5 @@ function generateSoundex(name) {
 }
 
 module.exports = {
-  getSoundexCode,
   generateSoundex,
 };
