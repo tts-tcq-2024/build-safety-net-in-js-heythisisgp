@@ -17,6 +17,11 @@ function padWithZeros(soundex) {
   return soundex;
 }
 
+function processChar(char, prevCode) {
+  const code = getSoundexCode(char);
+  return code !== '0' && code !== prevCode ? code : null;
+}
+
 function generateSoundex(name) {
   if (!name) return '';
 
@@ -25,14 +30,9 @@ function generateSoundex(name) {
   let prevCode = getSoundexCode(firstChar);
 
   for (let i = 1; i < name.length && soundex.length < 4; i++) {
-    const char = name[i];
-    const code = getSoundexCode(char);
-
-    if (code !== '0' && code !== prevCode) {
-      soundex.push(code);
-    }
-
-    prevCode = code;
+    const code = processChar(name[i], prevCode);
+    if (code) soundex.push(code);
+    prevCode = getSoundexCode(name[i]);
   }
 
   return padWithZeros(soundex).join('');
