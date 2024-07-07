@@ -11,18 +11,31 @@ function getSoundexCode(char) {
     return soundexDict[char] || '0';
 }
 
+function removeVowelsAndDuplicates(name) {
+    let result = [];
+    let prevCode = getSoundexCode(name[0]);
+
+    for (let i = 1; i < name.length; i++) {
+        let code = getSoundexCode(name[i]);
+        if (code !== '0' && code !== prevCode) {
+            result.push(code);
+        }
+        prevCode = code;
+    }
+
+    return result;
+}
+
 function generateSoundex(name) {
     if (!name) return '';
 
     let soundex = [name[0].toUpperCase()];
-    let prevCode = getSoundexCode(name[0]);
+    let encodedName = removeVowelsAndDuplicates(name);
 
-    for (let i = 1; i < name.length && soundex.length < 4; i++) {
-        let code = getSoundexCode(name[i]);
-        if (code !== '0' && code !== prevCode) {
+    for (let code of encodedName) {
+        if (soundex.length < 4) {
             soundex.push(code);
         }
-        prevCode = code;
     }
 
     while (soundex.length < 4) {
@@ -34,5 +47,6 @@ function generateSoundex(name) {
 
 module.exports = {
     getSoundexCode,
+    removeVowelsAndDuplicates,
     generateSoundex
 };
