@@ -1,20 +1,13 @@
-function getSoundexCode(char) {
-    const soundexDict = {
-        'BFPV': '1',
-        'CGJKQSXZ': '2',
-        'DT': '3',
-        'L': '4',
-        'MN': '5',
-        'R': '6'
-    };
-
-    for (let key in soundexDict) {
-        if (key.includes(char.toUpperCase())) {
-            return soundexDict[key];
-        }
+function getNextCode(prevCode, currentChar) {
+    const nextCode = getSoundexCode(currentChar);
+    if (prevCode === nextCode) {
+        return prevCode;
     }
-
-    return '0';
+    if ((['A', 'E', 'I', 'O', 'U'].includes(prevCode) && ['H', 'W'].includes(nextCode)) ||
+        (['H', 'W'].includes(prevCode) && ['A', 'E', 'I', 'O', 'U'].includes(nextCode))) {
+        return nextCode + nextCode;
+    }
+    return nextCode;
 }
 
 function generateSoundex(name) {
@@ -24,17 +17,20 @@ function generateSoundex(name) {
     let prevCode = getSoundexCode(name[0]);
 
     for (let i = 1; i < name.length && soundex.length < 4; i++) {
-        let code = getSoundexCode(name[i]);
-        if (code!== '0' && code!== prevCode) {
+        let code = getNextCode(prevCode, name[i]);
+        if (code !== prevCode) {
             soundex.push(code);
         }
         prevCode = code;
     }
 
-    soundex = soundex.slice(0, 4).padEnd(4, '0');
+    while (soundex.length < 4) {
+        soundex.push('0');
+    }
 
     return soundex.join('');
 }
+
 
 module.exports = {
     getSoundexCode,
