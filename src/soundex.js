@@ -10,10 +10,6 @@ function getSoundexCode(char) {
   return soundexDict[char.toUpperCase()] || '0';
 }
 
-function isVowelOrIgnored(char) {
-  return 'AEIOUYHW'.includes(char.toUpperCase());
-}
-
 function padWithZeros(soundex) {
   while (soundex.length < 4) {
     soundex.push('0');
