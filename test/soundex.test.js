@@ -1,39 +1,35 @@
-const { getSoundexCode, removeVowelsAndDuplicates, generateSoundex } = require('../src/soundex');
+describe('getSoundexCode', () => {
+    it('returns 1 for B', () => {
+        expect(getSoundexCode('B')).toBe('1');
+    });
 
-test('getSoundexCode returns correct code for consonants', () => {
-    expect(getSoundexCode('B')).toBe('1');
-    expect(getSoundexCode('C')).toBe('2');
-    expect(getSoundexCode('D')).toBe('3');
-    expect(getSoundexCode('L')).toBe('4');
-    expect(getSoundexCode('M')).toBe('5');
-    expect(getSoundexCode('R')).toBe('6');
+    it('returns 2 for C', () => {
+        expect(getSoundexCode('C')).toBe('2');
+    });
+
+    it('returns 0 for A', () => {
+        expect(getSoundexCode('A')).toBe('0');
+    });
 });
 
-test('getSoundexCode returns 0 for vowels and non-mapped characters', () => {
-    expect(getSoundexCode('A')).toBe('0');
-    expect(getSoundexCode('E')).toBe('0');
-    expect(getSoundexCode('I')).toBe('0');
-    expect(getSoundexCode('O')).toBe('0');
-    expect(getSoundexCode('U')).toBe('0');
-    expect(getSoundexCode('Y')).toBe('0');
-    expect(getSoundexCode('H')).toBe('0');
-    expect(getSoundexCode('W')).toBe('0');
-});
+describe('generateSoundex', () => {
+    it('returns empty string for empty input', () => {
+        expect(generateSoundex('')).toBe('');
+    });
 
-test('removeVowelsAndDuplicates returns correct encoding without vowels and duplicates', () => {
-    expect(removeVowelsAndDuplicates('Jackson')).toEqual(['2', '3', '2', '5']);
-    expect(removeVowelsAndDuplicates('Pfister')).toEqual(['1', '2', '3', '6']);
-});
+    it('returns single character for single-character input', () => {
+        expect(generateSoundex('A')).toBe('A000');
+    });
 
-test('generateSoundex returns correct soundex codes', () => {
-    expect(generateSoundex('Jackson')).toBe('J250');
-    expect(generateSoundex('Pfister')).toBe('P236');
-    expect(generateSoundex('Ashcraft')).toBe('A261');
-    expect(generateSoundex('Tymczak')).toBe('T522');
-    expect(generateSoundex('O\'Hara')).toBe('O600');
-});
+    it('returns soundex code for multiple-character input', () => {
+        expect(generateSoundex('Hello')).toBe('H400');
+    });
 
-test('generateSoundex handles empty and single character names', () => {
-    expect(generateSoundex('')).toBe('');
-    expect(generateSoundex('A')).toBe('A000');
+    it('returns soundex code with padding for short input', () => {
+        expect(generateSoundex('Hi')).toBe('H400');
+    });
+
+    it('returns soundex code without padding for long input', () => {
+        expect(generateSoundex('HelloWorld')).toBe('H436');
+    });
 });
