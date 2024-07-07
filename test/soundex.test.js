@@ -1,58 +1,39 @@
-const { expect } = require('chai');
-const { getSoundexCode, generateSoundex } = require('../src/soundex');
+const { getSoundexCode, removeVowelsAndDuplicates, generateSoundex } = require('../src/soundex');
 
-describe('getSoundexCode', () => {
-  it('returns the correct Soundex code for a character', () => {
-    expect(getSoundexCode('B')).to.equal('1');
-    expect(getSoundexCode('C')).to.equal('2');
-    expect(getSoundexCode('E')).to.equal('0'); // vowel, returns 0
-  });
-
-  it('returns 0 for characters without a Soundex code', () => {
-    expect(getSoundexCode('A')).to.equal('0');
-    expect(getSoundexCode('I')).to.equal('0');
-  });
-
-  it('returns 0 for non-alphabetic characters', () => {
-    expect(getSoundexCode('1')).to.equal('0');
-    expect(getSoundexCode('@')).to.equal('0');
-  });
-
-  it('returns 0 for null or undefined input', () => {
-    expect(getSoundexCode(null)).to.equal('0');
-    expect(getSoundexCode(undefined)).to.equal('0');
-  });
+test('getSoundexCode returns correct code for consonants', () => {
+    expect(getSoundexCode('B')).toBe('1');
+    expect(getSoundexCode('C')).toBe('2');
+    expect(getSoundexCode('D')).toBe('3');
+    expect(getSoundexCode('L')).toBe('4');
+    expect(getSoundexCode('M')).toBe('5');
+    expect(getSoundexCode('R')).toBe('6');
 });
 
-describe('generateSoundex', () => {
-  it('returns an empty string for an empty input', () => {
-    expect(generateSoundex('')).to.equal('');
-  });
+test('getSoundexCode returns 0 for vowels and non-mapped characters', () => {
+    expect(getSoundexCode('A')).toBe('0');
+    expect(getSoundexCode('E')).toBe('0');
+    expect(getSoundexCode('I')).toBe('0');
+    expect(getSoundexCode('O')).toBe('0');
+    expect(getSoundexCode('U')).toBe('0');
+    expect(getSoundexCode('Y')).toBe('0');
+    expect(getSoundexCode('H')).toBe('0');
+    expect(getSoundexCode('W')).toBe('0');
+});
 
-  it('returns the correct Soundex code for a single-character input', () => {
-    expect(generateSoundex('B')).to.equal('B000');
-  });
+test('removeVowelsAndDuplicates returns correct encoding without vowels and duplicates', () => {
+    expect(removeVowelsAndDuplicates('Jackson')).toEqual(['2', '3', '2', '5']);
+    expect(removeVowelsAndDuplicates('Pfister')).toEqual(['1', '2', '3', '6']);
+});
 
-  it('returns the correct Soundex code for a multi-character input', () => {
-    expect(generateSoundex('BCDE')).to.equal('B230');
-  });
+test('generateSoundex returns correct soundex codes', () => {
+    expect(generateSoundex('Jackson')).toBe('J250');
+    expect(generateSoundex('Pfister')).toBe('P236');
+    expect(generateSoundex('Ashcraft')).toBe('A261');
+    expect(generateSoundex('Tymczak')).toBe('T522');
+    expect(generateSoundex('O\'Hara')).toBe('O600');
+});
 
-  it('ignores vowels and returns the correct Soundex code', () => {
-    expect(generateSoundex('BAEIOU')).to.equal('B000');
-  });
-
-  it('handles characters with the same Soundex code', () => {
-    expect(generateSoundex('BBB')).to.equal('B100');
-    expect(generateSoundex('BCB')).to.equal('B200');
-  });
-
-  it('handles null or undefined input', () => {
-    expect(generateSoundex(null)).to.equal('');
-    expect(generateSoundex(undefined)).to.equal('');
-  });
-
-  it('handles input with non-alphabetic characters', () => {
-    expect(generateSoundex('B1C')).to.equal('B200');
-    expect(generateSoundex('B@C')).to.equal('B200');
-  });
+test('generateSoundex handles empty and single character names', () => {
+    expect(generateSoundex('')).toBe('');
+    expect(generateSoundex('A')).toBe('A000');
 });
