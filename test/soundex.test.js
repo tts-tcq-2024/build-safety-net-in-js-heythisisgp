@@ -1,24 +1,33 @@
-const { generateSoundex } = require('../src/soundex');
+const { getSoundexCode, generateSoundex } = require('./soundex');
 
-describe('generateSoundex', () => {
-    test('handles names starting with vowels', () => {
-        expect(generateSoundex('Apple')).toBe('A123');
-        expect(generateSoundex('Eagle')).toBe('E124');
+describe('Soundex', () => {
+  describe('getSoundexCode', () => {
+    it('returns the correct soundex code for a given character', () => {
+      expect(getSoundexCode('B')).to.equal('1');
+      expect(getSoundexCode('C')).to.equal('2');
+      expect(getSoundexCode('D')).to.equal('3');
+      expect(getSoundexCode('E')).to.equal('0');
+    });
+  });
+
+  describe('generateSoundex', () => {
+    it('returns an empty string for an empty input', () => {
+      expect(generateSoundex('')).to.equal('');
     });
 
-    test('handles repeated consonants', () => {
-        expect(generateSoundex('Castle')).toBe('C234');
+    it('returns the correct soundex code for a given name', () => {
+      expect(generateSoundex('John')).to.equal('J500');
+      expect(generateSoundex('Mary')).to.equal('M600');
+      expect(generateSoundex('Robert')).to.equal('R163');
     });
 
-    test('handles h/w between vowels', () => {
-        expect(generateSoundex('Howe')).toBe('HO11');
+    it('ignores vowels and non-alphabetic characters', () => {
+      expect(generateSoundex('John Doe')).to.equal('J500');
+      expect(generateSoundex('Mary-Ann')).to.equal('M600');
     });
 
-    test('handles mixed consonants and vowels', () => {
-        expect(generateSoundex('Computer')).toBe('C365');
+    it('handles names with multiple consecutive consonants', () => {
+      expect(generateSoundex('McDonald')).to.equal('M235');
     });
-
-    test('returns empty string for empty input', () => {
-        expect(generateSoundex('')).toBe('');
-    });
+  });
 });
