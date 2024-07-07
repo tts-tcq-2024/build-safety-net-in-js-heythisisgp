@@ -1,6 +1,10 @@
 const { expect } = require('chai');
 const { generateSoundex } = require('../src/soundex');
 
+function getSoundexCode(soundexString) {
+  return soundexString.slice(1); 
+}
+
 describe('getSoundexCode', () => {
   it('returns the correct Soundex code for a character', () => {
     expect(getSoundexCode('B')).toBe('1');
