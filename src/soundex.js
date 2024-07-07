@@ -10,6 +10,17 @@ function getSoundexCode(char) {
   return soundexDict[char.toUpperCase()] || '0';
 }
 
+function isVowelOrIgnored(char) {
+  return 'AEIOUYHW'.includes(char.toUpperCase());
+}
+
+function padWithZeros(soundex) {
+  while (soundex.length < 4) {
+    soundex.push('0');
+  }
+  return soundex;
+}
+
 function generateSoundex(name) {
   if (!name) return '';
 
@@ -18,18 +29,17 @@ function generateSoundex(name) {
   let prevCode = getSoundexCode(firstChar);
 
   for (let i = 1; i < name.length && soundex.length < 4; i++) {
-    let code = getSoundexCode(name[i]);
+    const char = name[i];
+    const code = getSoundexCode(char);
+
     if (code !== '0' && code !== prevCode) {
       soundex.push(code);
     }
+
     prevCode = code;
   }
 
-  while (soundex.length < 4) {
-    soundex.push('0');
-  }
-
-  return soundex.join('');
+  return padWithZeros(soundex).join('');
 }
 
 module.exports = {
