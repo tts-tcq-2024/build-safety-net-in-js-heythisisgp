@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const { getSoundexCode, generateSoundex } = require('./soundex');
+const { generateSoundex } = require('./soundex');
 
 describe('Soundex Algorithm', () => {
   describe('getSoundexCode', () => {
